@@ -4,6 +4,7 @@ package args
 import "flag"
 import "fmt"
 import "os"
+import "time"
 
 
 //
@@ -14,6 +15,7 @@ type Config struct {
 	NumLinksMax uint
 	NumImagesMin uint
 	NumImagesMax uint
+	Seed uint
 	//MaxLevels int,
 	//NumKeyValuePairs
 }
@@ -25,8 +27,14 @@ type Config struct {
 */
 func Parse() (retval Config) {
 
-	retval = Config{0, 0, 0, 0}
-	flag.UintVar(&retval.NumLinksMin, "num-links-min", 1, 
+	var seed int
+
+	retval = Config{0, 0, 0, 0, 0}
+	flag.IntVar(&seed, "seed", -1,
+		"Random seed to start with. This provides deterministic " +
+		"behavior between runs, which is great for testing purposes. " +
+		"If not specified, will be time.Now().Nanosecond(). ")
+	flag.UintVar(&retval.NumLinksMin, "num-links-min", 1,
 		"Minimum number of links per page")
 	flag.UintVar(&retval.NumLinksMax, "num-links-max", 0,
 		"Maximum number of links per page")
@@ -37,6 +45,16 @@ func Parse() (retval Config) {
 	h := flag.Bool("h", false, "To get this help")
 	help := flag.Bool("help", false, "To get this help")
 	flag.Parse()
+
+	//
+	// If a seed is specified, great!
+	// If not, use the current nanosecond
+	//
+	if (seed != -1) {
+		retval.Seed = uint(seed)
+	} else {
+		retval.Seed = uint(time.Now().Nanosecond())
+	}
 
 	if (retval.NumLinksMax == 0) {
 		retval.NumLinksMax = 1
