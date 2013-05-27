@@ -58,7 +58,7 @@ func TestStringLowerN(t *testing.T) {
 func TestRandomIntn(t *testing.T) {
 
 	random := New(0, 1000000)
-	expected := []uint64{52687, 817315, 787998}
+	expected := []uint{52687, 817315, 787998}
 	for i:=0; i<len(expected); i++ {
 		result := random.Intn()
 		row := expected[i]
@@ -68,7 +68,7 @@ func TestRandomIntn(t *testing.T) {
 	}
 
 	random = New(12345, 1000000)
-	expected = []uint64{752770, 447658, 316259}
+	expected = []uint{752770, 447658, 316259}
 	for i:=0; i<len(expected); i++ {
 		result := random.Intn()
 		row := expected[i]
@@ -81,7 +81,7 @@ func TestRandomIntn(t *testing.T) {
 	// Edge case
 	//
 	random = New(12345, 1)
-	expected = []uint64{0, 0, 0}
+	expected = []uint{0, 0, 0}
 	for i:=0; i<len(expected); i++ {
 		result := random.Intn()
 		row := expected[i]
@@ -106,7 +106,7 @@ func TestRandomIntn(t *testing.T) {
 
 
 	random = New(12345, 0)
-	expected = []uint64{0, 0, 0}
+	expected = []uint{0, 0, 0}
 	for i:=0; i<len(expected); i++ {
 		result := random.Intn()
 		row := expected[i]
@@ -124,15 +124,15 @@ func TestRandomIntnChannel(t *testing.T) {
 
 	random := New(0, 1000000)
 
-	in := make(chan uint64)
-	out := make(chan []uint64)
+	in := make(chan uint)
+	out := make(chan []uint)
 
 	go random.IntnChannel(in, out)
 
 	in <- 3
 	results := <-out
 
-	expected := []uint64{52687, 817315, 787998}
+	expected := []uint{52687, 817315, 787998}
 	for i:=0; i<len(expected); i++ {
 		result := results[i]
 		row := expected[i]
@@ -145,7 +145,7 @@ func TestRandomIntnChannel(t *testing.T) {
 	in <- 3
 	results = <-out
 
-	expected = []uint64{752770, 447658, 316259}
+	expected = []uint{752770, 447658, 316259}
 	for i:=0; i<len(expected); i++ {
 		result := results[i]
 		row := results[i]

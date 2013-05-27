@@ -18,11 +18,11 @@ type random_struct struct {
 	//
 	// We will generate this number or lower.
 	//
-	max uint64
+	max uint
 	//
 	// Our bitmask for pulling values from MD5 responses
 	//
-	bitmask uint64
+	bitmask uint
 }
 
 
@@ -34,7 +34,7 @@ type random_struct struct {
 *	We're specifying this at creation time so that the bitmask 
 *	only needs to be created once.
 */
-func New(seed uint64, max uint64) (retval random_struct) {
+func New(seed uint, max uint) (retval random_struct) {
 
 	if (max == 0) {
 		panic("Max can't be == 0!")
@@ -53,7 +53,7 @@ func New(seed uint64, max uint64) (retval random_struct) {
 * Core function that actually grabs the next "random" integer.
 * @return {int} An integer
 */
-func (r *random_struct) int() (retval uint64) {
+func (r *random_struct) int() (retval uint) {
 
 	//
 	// Create a hash based on our current seed
@@ -69,13 +69,21 @@ func (r *random_struct) int() (retval uint64) {
 	r.seed = string(md5_value)
 
 	//
-	// Grab 8 bytes and put them into a uint64
+	// Grab 8 bytes 
 	//
-	// @todo In the future, I should store the remaining 8 bytes for 
+	// @todo In the future, maybe I should store the remaining 8 bytes for 
 	// the next call
 	//
 	buf := bytes.NewBuffer(md5_value)
-	binary.Read(buf, binary.LittleEndian, &retval)
+
+	//
+	// I'm not yet clear on why I can't use 32 bits, but anyway 
+	// here's where I'm going to grab the least significant 
+	// 32 bits and store them in retval
+	//
+	var retval64 uint64
+	binary.Read(buf, binary.LittleEndian, &retval64)
+	retval = uint(retval64)
 	//fmt.Println(md5_value, retval)
 
 	return(retval)
@@ -87,7 +95,7 @@ func (r *random_struct) int() (retval uint64) {
 * Return a random number between 1 and n
 * @return {integer} retval The random value
 */
-func (r *random_struct) Intn() (retval uint64) {
+func (r *random_struct) Intn() (retval uint) {
 
 	retval = r.int()
 	retval = retval & r.bitmask
@@ -110,18 +118,18 @@ func (r *random_struct) Intn() (retval uint64) {
 * Read a request off of a channel, generate a random value, and write 
 * it back out.
 *
-* @param {integer} How many random numbers do we want back?
-* @param {chan int} out The channel to write results out to
+* @param {chan uint} How many random numbers do we want back?
+* @param {chan uint} out The channel to write results out to
 */
-func (r *random_struct) IntnChannel(in chan uint64, out chan []uint64) {
+func (r *random_struct) IntnChannel(in chan uint, out chan []uint) {
 
 	log.Info("Spawned IntNChannel()")
 
 	for {
-		var retval []uint64
+		var retval []uint
 		num_random := <-in
 
-		for i:=uint64(0); i<num_random; i++ {
+		for i:=uint(0) ; i<num_random; i++ {
 			num := r.Intn()
 			retval = append(retval, num)
 		}
@@ -137,15 +145,15 @@ func (r *random_struct) IntnChannel(in chan uint64, out chan []uint64) {
 * Create a bitmask from our max value.  This is for extracting that 
 * value from an MD5 hash.
 *
-* @param {uint64} max Our maximum random value
-* @return {uint64} A value which is 2*n-1.
+* @param {int} max Our maximum random value
+* @return {int} A value which is 2*n-1.
 *
 * @TODO: In the future, I may want to address performance issues.  
 *	I can think of a few ways:
 *	- Cache results (could get out of control on memory usage, though)
 *	- Require a max number to be specificed 
 */
-func getBitmask(max uint64) (retval uint64) {
+func getBitmask(max uint) (retval uint) {
 
 	retval = 1
 	for i:=1; i<64; i++ {
@@ -167,7 +175,7 @@ func getBitmask(max uint64) (retval uint64) {
 * @param {int} num How many characters do we want?
 * @return {string} The random string
 */
-func (r *random_struct) StringLowerN(num_chars int) (retval string) {
+func (r *random_struct) StringLowerN(num_chars uint) (retval string) {
 
 	//
 	// Loop through our integers until we get something in the 
@@ -180,7 +188,7 @@ func (r *random_struct) StringLowerN(num_chars int) (retval string) {
 			retval = retval + fmt.Sprintf("%c", num + 97)
 		}
 
-		if (len(retval) >= num_chars) {
+		if (uint(len(retval)) >= num_chars) {
 			break
 		}
 
@@ -196,7 +204,7 @@ func (r *random_struct) StringLowerN(num_chars int) (retval string) {
 * @param {int} num How many characters do we want?
 * @return {string} The random string
 */
-func (r *random_struct) StringN(num_chars int) (retval string) {
+func (r *random_struct) StringN(num_chars uint) (retval string) {
 
 	//
 	// Loop through our integers until we get something in the 
@@ -219,7 +227,7 @@ func (r *random_struct) StringN(num_chars int) (retval string) {
 
 		}
 
-		if (len(retval) >= num_chars) {
+		if (uint(len(retval)) >= num_chars) {
 			break
 		}
 
