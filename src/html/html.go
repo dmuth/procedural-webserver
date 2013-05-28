@@ -42,16 +42,15 @@ func New(config args.Config) (retval Html_struct) {
 /**
 * Create a fake HTML page.
 * 
-* @param {args.Config} Our configuration structure
 * @return {string} Our fake page with links and images
 */
-func (h *Html_struct) Html(config args.Config) (retval string) {
+func (h *Html_struct) Html() (retval string) {
 
 	//
 	// Create the actual links and images
 	//
-	retval += h.getLinks(config)
-	retval += h.getImages(config)
+	retval += h.getLinks(h.config)
+	retval += h.getImages(h.config)
 
 	retval = "<html>\n" + 
 		"<head><title></title></head>\n" +
