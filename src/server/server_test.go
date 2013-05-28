@@ -1,0 +1,73 @@
+
+package server
+
+import "fmt"
+import "net/http"
+import "io/ioutil"
+import "regexp"
+import "testing"
+
+import "../args"
+
+
+func TestServer(t *testing.T) {
+
+	port := 8080
+	config := args.Config{1, 5, 1, 5, 1}
+	server_obj := New(config, port)
+
+	go server_obj.Start()
+
+    result := httpGet("http://localhost/")
+	//fmt.Printf("%s\n", result)
+	pattern := "egfwcjovxo"
+	match, _ := regexp.MatchString(pattern, result)
+	if (!match) {
+		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
+	}
+
+    result = httpGet("http://localhost/12345")
+	//fmt.Printf("%s\n", result)
+	pattern = "sfdkpsaewa"
+	match, _ = regexp.MatchString(pattern, result)
+	if (!match) {
+		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
+	}
+
+    result = httpGet("http://localhost/?foo=bar")
+	//fmt.Printf("%s\n", result)
+	pattern = "blatclqoxs"
+	match, _ = regexp.MatchString(pattern, result)
+	if (!match) {
+		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
+	}
+
+	// TODO: Test a 404 response, new function should return a code as well
+
+	server_obj.Stop()
+
+}
+
+
+/**
+* Helper function to make GET requests and return the value.
+*/
+func httpGet(url string) (retval string) {
+
+	resp, err := http.Get(url)
+	if (err != nil) {
+		return
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+
+	if (err != nil) {
+		return
+	}
+
+	return(fmt.Sprintf("%s", body))
+
+} // End of httpGet()
+
+
