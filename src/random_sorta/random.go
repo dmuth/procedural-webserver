@@ -10,7 +10,7 @@ import "fmt"
 import log "github.com/dmuth/google-go-log4go"
 
 
-type random_struct struct {
+type Random_struct struct {
 	//
 	// The results of the previous hash.
 	//
@@ -34,7 +34,7 @@ type random_struct struct {
 *	We're specifying this at creation time so that the bitmask 
 *	only needs to be created once.
 */
-func New(seed uint, max uint) (retval random_struct) {
+func New(seed uint, max uint) (retval Random_struct) {
 
 	if (max == 0) {
 		panic("Max can't be == 0!")
@@ -42,7 +42,7 @@ func New(seed uint, max uint) (retval random_struct) {
 
 	bitmask := getBitmask(max)
 
-	retval = random_struct{fmt.Sprintf("%d", seed), max, bitmask}
+	retval = Random_struct{fmt.Sprintf("%d", seed), max, bitmask}
 
 	return(retval)
 
@@ -53,7 +53,7 @@ func New(seed uint, max uint) (retval random_struct) {
 * Core function that actually grabs the next "random" integer.
 * @return {int} An integer
 */
-func (r *random_struct) int() (retval uint) {
+func (r *Random_struct) int() (retval uint) {
 
 	//
 	// Create a hash based on our current seed
@@ -95,7 +95,7 @@ func (r *random_struct) int() (retval uint) {
 * Return a random number between 1 and n
 * @return {integer} retval The random value
 */
-func (r *random_struct) Intn() (retval uint) {
+func (r *Random_struct) Intn() (retval uint) {
 
 	retval = r.int()
 	retval = retval & r.bitmask
@@ -121,7 +121,7 @@ func (r *random_struct) Intn() (retval uint) {
 * @param {chan uint} How many random numbers do we want back?
 * @param {chan uint} out The channel to write results out to
 */
-func (r *random_struct) IntnChannel(in chan uint, out chan []uint) {
+func (r *Random_struct) IntnChannel(in chan uint, out chan []uint) {
 
 	log.Info("Spawned IntNChannel()")
 
@@ -175,7 +175,7 @@ func getBitmask(max uint) (retval uint) {
 * @param {int} num How many characters do we want?
 * @return {string} The random string
 */
-func (r *random_struct) StringLowerN(num_chars uint) (retval string) {
+func (r *Random_struct) StringLowerN(num_chars uint) (retval string) {
 
 	//
 	// Loop through our integers until we get something in the 
@@ -204,7 +204,7 @@ func (r *random_struct) StringLowerN(num_chars uint) (retval string) {
 * @param {int} num How many characters do we want?
 * @return {string} The random string
 */
-func (r *random_struct) StringN(num_chars uint) (retval string) {
+func (r *Random_struct) StringN(num_chars uint) (retval string) {
 
 	//
 	// Loop through our integers until we get something in the 
