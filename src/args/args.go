@@ -36,11 +36,11 @@ func Parse() (retval Config) {
 		"If not specified, will be time.Now().Nanosecond(). ")
 	flag.UintVar(&retval.NumLinksMin, "num-links-min", 1,
 		"Minimum number of links per page")
-	flag.UintVar(&retval.NumLinksMax, "num-links-max", 0,
+	flag.UintVar(&retval.NumLinksMax, "num-links-max", 2,
 		"Maximum number of links per page")
 	flag.UintVar(&retval.NumImagesMin, "num-images-min", 1,
 		"Minimum number of image links per page")
-	flag.UintVar(&retval.NumImagesMax, "num-images-max", 0,
+	flag.UintVar(&retval.NumImagesMax, "num-images-max", 2,
 		"Maximum number of image links per page")
 	h := flag.Bool("h", false, "To get this help")
 	help := flag.Bool("help", false, "To get this help")
@@ -54,14 +54,6 @@ func Parse() (retval Config) {
 		retval.Seed = uint(seed)
 	} else {
 		retval.Seed = uint(time.Now().Nanosecond())
-	}
-
-	if (retval.NumLinksMax == 0) {
-		retval.NumLinksMax = 1
-	}
-
-	if (retval.NumImagesMax == 0) {
-		retval.NumImagesMax = 1
 	}
 
 	if (retval.NumLinksMax < retval.NumLinksMin) {
