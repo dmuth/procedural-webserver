@@ -6,6 +6,8 @@ import "fmt"
 import "os"
 import "time"
 
+import log "github.com/dmuth/google-go-log4go"
+
 
 //
 // Configuration for what was passed in on the command line.
@@ -30,6 +32,7 @@ func Parse() (retval Config) {
 	var seed int
 
 	retval = Config{0, 0, 0, 0, 0}
+
 	flag.IntVar(&seed, "seed", -1,
 		"Random seed to start with. This provides deterministic " +
 		"behavior between runs, which is great for testing purposes. " +
@@ -42,9 +45,16 @@ func Parse() (retval Config) {
 		"Minimum number of image links per page")
 	flag.UintVar(&retval.NumImagesMax, "num-images-max", 2,
 		"Maximum number of image links per page")
+
 	h := flag.Bool("h", false, "To get this help")
 	help := flag.Bool("help", false, "To get this help")
+
+	debug_level := flag.String("debug-level", "info", "Set the debug level")
+
 	flag.Parse()
+
+	log.SetLevelString(*debug_level)
+	log.Error("Debug level: " + *debug_level)
 
 	//
 	// If a seed is specified, great!
