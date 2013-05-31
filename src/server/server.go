@@ -5,8 +5,10 @@
 package server
 
 import "fmt"
+import "time"
 import "net"
 import "net/http"
+import "strconv"
 
 import log "github.com/dmuth/google-go-log4go"
 
@@ -84,14 +86,30 @@ func (s *Server_struct) Stop() {
 *
 */
 func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+
 	log.Debugf("Handling: %s (%s %s)", req.URL.Path, req.RequestURI, req.RemoteAddr)
-	code := req.FormValue("code")
-	log.Debugf("Code: %s", code)
+	code, _ := strconv.Atoi(req.FormValue("code"))
+	log.Debugf("Code passed in: %d", code)
+
+	delay := req.FormValue("delay")
+	log.Debugf("Delay passed in: %s", delay)
+	if (delay != "") {
+		duration, _ := time.ParseDuration(delay)
+		log.Debugf("Pausing for %s...", duration )
+		time.Sleep(duration)
+	}
+
 	//
-	// TODO: If code is 404, return not fond
+	// Set an error code if one was passed in.
+	// We'll still send the content, since that's legitimate.
 	//
+	if (code != 0) {
+		http.Error(res, "", code)
+	}
+
 	output := s.html.Html()
 	fmt.Fprintf(res, output)
-}
+
+} // End of ServeHTTP()
 
 
