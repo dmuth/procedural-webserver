@@ -87,7 +87,9 @@ func (s *Server_struct) Stop() {
 */
 func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
-	log.Debugf("Handling: %s (%s %s)", req.URL.Path, req.RequestURI, req.RemoteAddr)
+	log.Infof("Request Start: %s (%s %s)", req.URL.Path, req.RequestURI, req.RemoteAddr)
+	start_time := time.Now()
+
 	code, _ := strconv.Atoi(req.FormValue("code"))
 	log.Debugf("Code passed in: %d", code)
 
@@ -109,6 +111,11 @@ func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	output := s.html.Html()
 	fmt.Fprintf(res, output)
+
+	elapsed := time.Now().Sub(start_time)
+	log.Infof("Request Complete in %.6f sec: %s (%s %s)",
+		float64(elapsed.Nanoseconds()) / float64(1000000000),
+		req.URL.Path, req.RequestURI, req.RemoteAddr)
 
 } // End of ServeHTTP()
 
