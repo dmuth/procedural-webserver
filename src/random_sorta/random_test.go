@@ -7,7 +7,8 @@ import "testing"
 
 func TestStringN(t *testing.T) {
 
-	random := New(0, 1000000)
+
+	random := New(0)
 	output := random.StringN(1)
 	expected := "P"
 	if (output != expected) {
@@ -20,7 +21,7 @@ func TestStringN(t *testing.T) {
 			t.Errorf("Got: %s, expected: %s", output, expected)
 	}
 
-	random = New(12345, 1000000)
+	random = New(12345)
 	output = random.StringN(10)
 	expected = "CqjpmnVJwT"
 	if (output != expected) {
@@ -32,7 +33,7 @@ func TestStringN(t *testing.T) {
 
 func TestStringLowerN(t *testing.T) {
 
-	random := New(0, 1000000)
+	random := New(0)
 	output := random.StringLowerN(1)
 	expected := "p"
 	if (output != expected) {
@@ -45,7 +46,7 @@ func TestStringLowerN(t *testing.T) {
 			t.Errorf("Got: %s, expected: %s", output, expected)
 	}
 
-	random = New(12345, 1000000)
+	random = New(12345)
 	output = random.StringLowerN(10)
 	expected = "ckdjgvhvjq"
 	if (output != expected) {
@@ -57,20 +58,20 @@ func TestStringLowerN(t *testing.T) {
 
 func TestRandomIntn(t *testing.T) {
 
-	random := New(0, 1000000)
+	random := New(0)
 	expected := []uint{52687, 817315, 787998}
 	for i:=0; i<len(expected); i++ {
-		result := random.Intn()
+		result := random.Intn(1000000)
 		row := expected[i]
 		if (result != row) {
 			t.Errorf("%d != %d", result, row)
 		}
 	}
 
-	random = New(12345, 1000000)
+	random = New(12345)
 	expected = []uint{752770, 447658, 316259}
 	for i:=0; i<len(expected); i++ {
-		result := random.Intn()
+		result := random.Intn(1000000)
 		row := expected[i]
 		if (result != row) {
 			t.Errorf("Got: %d, expected: %d", result, row)
@@ -80,16 +81,15 @@ func TestRandomIntn(t *testing.T) {
 	//
 	// Edge case
 	//
-	random = New(12345, 1)
+	random = New(12345)
 	expected = []uint{0, 0, 0}
 	for i:=0; i<len(expected); i++ {
-		result := random.Intn()
+		result := random.Intn(1)
 		row := expected[i]
 		if (result != row) {
 			t.Errorf("Got: %d, expected: %d", result, row)
 		}
 	}
-
 
 	//
 	// Using a max of zero should panic.
@@ -105,10 +105,10 @@ func TestRandomIntn(t *testing.T) {
 	}()
 
 
-	random = New(12345, 0)
+	random = New(12345)
 	expected = []uint{0, 0, 0}
 	for i:=0; i<len(expected); i++ {
-		result := random.Intn()
+		result := random.Intn(0)
 		row := expected[i]
 		if (result != row) {
 			t.Errorf("Got: %d, expected: %d", result, row)
@@ -122,14 +122,14 @@ func TestRandomIntn(t *testing.T) {
 
 func TestRandomIntnChannel(t *testing.T) {
 
-	random := New(0, 1000000)
+	random := New(0)
 
-	in := make(chan uint)
+	in := make(chan []uint)
 	out := make(chan []uint)
 
 	go random.IntnChannel(in, out)
 
-	in <- 3
+	in <- []uint{3, 1000000}
 	results := <-out
 
 	expected := []uint{52687, 817315, 787998}
@@ -142,7 +142,7 @@ func TestRandomIntnChannel(t *testing.T) {
 	}
 
 
-	in <- 3
+	in <- []uint{3, 1000000}
 	results = <-out
 
 	expected = []uint{752770, 447658, 316259}

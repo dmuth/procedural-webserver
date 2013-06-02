@@ -15,14 +15,6 @@ type Random_struct struct {
 	// The results of the previous hash.
 	//
 	seed string
-	//
-	// We will generate this number or lower.
-	//
-	max uint
-	//
-	// Our bitmask for pulling values from MD5 responses
-	//
-	bitmask uint
 }
 
 
@@ -34,15 +26,9 @@ type Random_struct struct {
 *	We're specifying this at creation time so that the bitmask 
 *	only needs to be created once.
 */
-func New(seed uint, max uint) (retval Random_struct) {
+func New(seed uint) (retval Random_struct) {
 
-	if (max == 0) {
-		panic("Max can't be == 0!")
-	}
-
-	bitmask := getBitmask(max)
-
-	retval = Random_struct{fmt.Sprintf("%d", seed), max, bitmask}
+	retval = Random_struct{fmt.Sprintf("%d", seed)}
 
 	return(retval)
 
@@ -95,18 +81,23 @@ func (r *Random_struct) int() (retval uint) {
 * Return a random number between 1 and n
 * @return {integer} retval The random value
 */
-func (r *Random_struct) Intn() (retval uint) {
+func (r *Random_struct) Intn(max uint) (retval uint) {
+
+	if (max == 0) {
+		panic("Max can't be == 0!")
+	}
 
 	retval = r.int()
-	retval = retval & r.bitmask
+	bitmask := getBitmask(max)
+	retval = retval & bitmask
 
 	//
 	// If the value is too big (e.g. 32 when the max is 17), call ourself
 	// again and hope we get lucky.
 	// (And I hope this never causes a stack overflow...)
 	//
-	if (retval >= r.max) {
-		retval = r.Intn()
+	if (retval >= max) {
+		retval = r.Intn(max)
 	}
 
 	return(retval)
@@ -121,16 +112,18 @@ func (r *Random_struct) Intn() (retval uint) {
 * @param {chan uint} How many random numbers do we want back?
 * @param {chan uint} out The channel to write results out to
 */
-func (r *Random_struct) IntnChannel(in chan uint, out chan []uint) {
+func (r *Random_struct) IntnChannel(in chan []uint, out chan []uint) {
 
 	log.Info("Spawned IntNChannel()")
 
 	for {
 		var retval []uint
-		num_random := <-in
+		in_read := <-in
+		num_random := in_read[0]
+		max := in_read[1]
 
 		for i:=uint(0) ; i<num_random; i++ {
-			num := r.Intn()
+			num := r.Intn(max)
 			retval = append(retval, num)
 		}
 
@@ -183,10 +176,8 @@ func (r *Random_struct) StringLowerN(num_chars uint) (retval string) {
 	//
 	for {
 
-		num := r.Intn() & 31
-		if (num <= 25) {
-			retval = retval + fmt.Sprintf("%c", num + 97)
-		}
+		num := r.Intn(26)
+		retval = retval + fmt.Sprintf("%c", num + 97)
 
 		if (uint(len(retval)) >= num_chars) {
 			break
@@ -212,20 +203,16 @@ func (r *Random_struct) StringN(num_chars uint) (retval string) {
 	//
 	for {
 
-		num := r.Intn() & 63
-		if (num <= 51) {
-
-			if (num <= 25) {
-				num += 65
-			} else {
-				num -= 26
-				num += 97
-			}
-			//fmt.Printf("%d: %c\n", num, num)
-
-			retval = retval + fmt.Sprintf("%c", num)
-
+		num := r.Intn(52) 
+		if (num <= 25) {
+			num += 65
+		} else {
+			num -= 26
+			num += 97
 		}
+		//fmt.Printf("%d: %c\n", num, num)
+
+		retval = retval + fmt.Sprintf("%c", num)
 
 		if (uint(len(retval)) >= num_chars) {
 			break
