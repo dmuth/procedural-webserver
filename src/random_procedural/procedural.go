@@ -1,6 +1,6 @@
 
 
-package random_sorta
+package random_procedural
 
 import "bytes"
 import "crypto/md5"

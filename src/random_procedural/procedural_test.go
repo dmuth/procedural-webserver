@@ -1,5 +1,5 @@
 
-package random_sorta
+package random_procedural
 
 //import "fmt"
 import "testing"
