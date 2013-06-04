@@ -1,6 +1,6 @@
 ## Procedural Webserver
 
-A webserver written in Google Go which served up procedurally generated content.
+A webserver written in Google Go which serves up procedurally generated content.
 
 I built this for a webcrawler which I am working on--I did not want to test 
 it out by hamming the same set of websites over and over (as I am sure the
