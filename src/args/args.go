@@ -4,7 +4,6 @@ package args
 import "flag"
 import "fmt"
 import "os"
-import "time"
 
 import log "github.com/dmuth/google-go-log4go"
 
@@ -17,7 +16,7 @@ type Config struct {
 	NumLinksMax uint
 	NumImagesMin uint
 	NumImagesMax uint
-	Seed uint
+	Seed string
 	//MaxLevels int,
 	//NumKeyValuePairs
 }
@@ -29,14 +28,12 @@ type Config struct {
 */
 func Parse() (retval Config) {
 
-	var seed int
+	retval = Config{0, 0, 0, 0, ""}
 
-	retval = Config{0, 0, 0, 0, 0}
-
-	flag.IntVar(&seed, "seed", -1,
+	flag.StringVar(&retval.Seed, "seed", "generic_seed",
 		"Random seed to start with. This provides deterministic " +
 		"behavior between runs, which is great for testing purposes. " +
-		"If not specified, will be time.Now().Nanosecond(). ")
+		"If not specified, the default will be used. ")
 	flag.UintVar(&retval.NumLinksMin, "num-links-min", 1,
 		"Minimum number of links per page")
 	flag.UintVar(&retval.NumLinksMax, "num-links-max", 2,
@@ -55,16 +52,6 @@ func Parse() (retval Config) {
 
 	log.SetLevelString(*debug_level)
 	log.Error("Debug level: " + *debug_level)
-
-	//
-	// If a seed is specified, great!
-	// If not, use the current nanosecond
-	//
-	if (seed != -1) {
-		retval.Seed = uint(seed)
-	} else {
-		retval.Seed = uint(time.Now().Nanosecond())
-	}
 
 	if (retval.NumLinksMax < retval.NumLinksMin) {
 		panic(fmt.Sprintf(
