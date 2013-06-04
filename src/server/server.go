@@ -87,7 +87,8 @@ func (s *Server_struct) Stop() {
 */
 func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
-	log.Infof("Request Start: %s (%s %s)", req.URL.Path, req.RequestURI, req.RemoteAddr)
+	uri := req.RequestURI
+	log.Infof("Request Start: %s (%s %s)", req.URL.Path, uri, req.RemoteAddr)
 	start_time := time.Now()
 
 	code, _ := strconv.Atoi(req.FormValue("code"))
@@ -109,7 +110,11 @@ func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "", code)
 	}
 
-	output := s.html.Html()
+	//
+	// Our URI is our seed so we'll get the same content on repeated page 
+	// loads. (aka procedural page generation!)
+	//
+	output := s.html.Html(uri)
 	fmt.Fprintf(res, output)
 
 	elapsed := time.Now().Sub(start_time)

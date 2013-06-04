@@ -13,14 +13,14 @@ import "../args"
 func TestServer(t *testing.T) {
 
 	port := 8080
-	config := args.Config{1, 5, 1, 5, 1}
+	config := args.Config{1, 5, 1, 5, "test_seed"}
 	server_obj := New(config, port)
 
 	go server_obj.Start()
 
     result := httpGet(fmt.Sprintf("http://localhost:%d", port))
 	//fmt.Printf("%s\n", result)
-	pattern := "egfwcjovex"
+	pattern := "pqboezwitj"
 	match, _ := regexp.MatchString(pattern, result)
 	if (!match) {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
@@ -28,7 +28,7 @@ func TestServer(t *testing.T) {
 
     result = httpGet(fmt.Sprintf("http://localhost:%d/12345", port))
 	//fmt.Printf("%s\n", result)
-	pattern = "bfiyxsfdkp"
+	pattern = "asjytxxjmd"
 	match, _ = regexp.MatchString(pattern, result)
 	if (!match) {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
@@ -36,7 +36,7 @@ func TestServer(t *testing.T) {
 
     result = httpGet(fmt.Sprintf("http://localhost:%d/?foo=bar", port))
 	//fmt.Printf("%s\n", result)
-	pattern = "namlnmfutt"
+	pattern = "zniescypfb"
 	match, _ = regexp.MatchString(pattern, result)
 	if (!match) {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
