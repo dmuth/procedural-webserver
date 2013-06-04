@@ -15,7 +15,11 @@ set -e
 #
 killall a.out || true
 
-go run ./main.go --debug-level trace &
+OPTS=""
+OPTS="${OPTS} --debug-level trace"
+OPTS="${OPTS} --seed testSeed "
+go run ./main.go ${OPTS} &
+
 
 #
 # Wait for the server to start up
@@ -25,7 +29,9 @@ sleep 2
 
 function get() {
 	URL=$1
-	curl -I $1
+	OPTS=""
+	OPTS="${OPTS} -I"
+	curl ${OPTS} $1
 
 }
 
