@@ -127,7 +127,8 @@ func (s *Server_struct) Stop() {
 func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	uri := req.RequestURI
-	log.Infof("Request Start: %s (%s %s)", req.URL.Path, uri, req.RemoteAddr)
+	log.Infof("Request Start: %s (%s %s) User-Agent: %s", req.URL.Path, uri, 
+		req.RemoteAddr, req.UserAgent())
 	start_time := time.Now()
 
 	code, _ := strconv.Atoi(req.FormValue("code"))
