@@ -16,7 +16,7 @@ This will install required packages, such as my [Log4go package](https://github.
 
 ### Syntax
 
-    go run ./main.go [--debug-level level] [--num-images-max n] [--num-images-min n] 
+    go run ./*.go [--debug-level level] [--num-images-max n] [--num-images-min n] 
         [--num-links-max n] [--num-links-min n] [--seed "seed string"]
     
     --debug-level Specify a debugging level. Valid values are "error", "warn", "info", "debug", and "trace".
