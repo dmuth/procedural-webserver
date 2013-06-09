@@ -11,7 +11,7 @@ import "testing"
 func TestServer(t *testing.T) {
 
 	port := 8080
-	server_obj := NewServer(port, 1, 5, 1, 5, "test_seed")
+	server_obj := NewServer(port, 10, 20, 10, 20, "test_seed")
 
 	go server_obj.Start()
 
