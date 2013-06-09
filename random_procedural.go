@@ -43,10 +43,8 @@ func (r *Random_struct) int(seed string) (retval uint) {
 	//
 	hash := md5.New()
 	//hash.Write([]byte(fmt.Sprintf("%d", seed)))
-// TEST
 	hash.Write([]byte(seed))
 	md5_value := hash.Sum(nil)
-// TEST
 	//fmt.Println("MD5:", fmt.Sprintf("%x", md5_value))
 
 	//
@@ -92,17 +90,10 @@ func (r *Random_struct) Intn(seed string, max uint) (retval uint) {
 	// (And I hope this never causes a stack overflow...)
 	//
 	if (retval >= max) {
-// TEST
 		hash := md5.New()
 		hash.Write([]byte(seed))
-//fmt.Printf("%x\n", hash.Sum(nil))
-//fmt.Printf("%x\n", hash.Sum(nil))
-		//md5_value := hash.Sum(nil)
-		//seed = fmt.Sprintf("%x", md5_value)
 		seed = fmt.Sprintf("%x", hash.Sum(nil))
 
-// TEST
-//fmt.Println("TEST", fmt.Sprintf("%x", seed), retval, max)
 		retval = r.Intn(seed, max)
 
 	}
