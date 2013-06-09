@@ -8,25 +8,25 @@ owners would not appreciate that) so I instead wrote this webserver to serve
 up content which is generated procedurally.  That way, I can hammer it with my 
 web crawler yet still get unique pages generated with little memory usage.
 
-### Set up
+### Usage
 
-This will install required packages, such as my [Log4go package](https://github.com/dmuth/google-go-log4go):
+To use this in your app, you'd want Go code that looks like this:
 
-    go get
+    import server "github.com/dmuth/procedural-webserver"
 
-### Syntax
+    func main() {
+        server_object := server.NewServer(port, NumLinksMin, NumLinksMax, NumImagesMin, NumImagesMax, Seed)
+        go server_object.Start() // Start the webserver
+        // do stuff
+        server_object.Stop() // Stop the webserver
+    }
 
-    go run ./*.go [--debug-level level] [--num-images-max n] [--num-images-min n] 
-        [--num-links-max n] [--num-links-min n] [--seed "seed string"]
-    
-    --debug-level Specify a debugging level. Valid values are "error", "warn", "info", "debug", and "trace".
-    --num-images-max Max number of images listed on each generated page. (they're not really images)
-    --num-images-min Min number of images. (actual number of created images is somewhere between min and max)
-    --num-links-max Max number of links listed on each generated page. (links bring up more procedurally 
-        generated content)
-    --num-links-min Min number of links. (actual number of created images is somewhere between min and max)
-    --seed Our base seed. If not specified, a default is used.  If specified, this change s the content of 
-        all pages. If you understand how Minecraft world seeds work, this is the same concept.
+- NumLinksMin: Min number of links. (actual number of created images is somewhere between min and max)
+- NumLinksMax: Max number of links listed on each generated page. (links bring up more procedurally generated content)
+- NumImagesMin: Min number of images. (actual number of created images is somewhere between min and max)
+- NumImagesMax: Max number of images listed on each generated page. (they're not really images)
+- Seed: Our base seed. If not specified, a default is used.  If specified, this change s the content of 
+all pages. If you understand how Minecraft world seeds work, this is the same concept.
     
 Once the server is running, do `curl localhost` to bring up the main page and go from there.
 
