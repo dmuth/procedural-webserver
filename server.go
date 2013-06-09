@@ -96,8 +96,25 @@ func (s *Server_struct) Start() {
 * Stop our currently running server.
 */
 func (s *Server_struct) Stop() {
-	s.listener.Close()
-}
+
+	//
+	// If we try to close something that is nil, we'll get a panic.
+	// This is a race condition which can be triggered if we close 
+	// the server immediately after starting it.
+	//
+	if (s.listener == nil) {
+		//
+		// I'm not sure if not closing a listener which hasn't yet opened 
+		// can cause issues down the road, hence the Warning.
+		//
+		log.Warn("Stop(): Listener is currently nil, not closing.")
+
+	} else {
+		s.listener.Close()
+
+	}
+
+} // End of Stop()
 
 
 /**
