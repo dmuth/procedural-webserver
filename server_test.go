@@ -17,7 +17,7 @@ func TestServer(t *testing.T) {
 
     result := httpGet(fmt.Sprintf("http://localhost:%d", port))
 	//fmt.Printf("%s\n", result)
-	pattern := "pqboezwitj"
+	pattern := "mwhxoejfka"
 	match, _ := regexp.MatchString(pattern, result)
 	if (!match) {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
@@ -25,7 +25,7 @@ func TestServer(t *testing.T) {
 
     result = httpGet(fmt.Sprintf("http://localhost:%d/12345", port))
 	//fmt.Printf("%s\n", result)
-	pattern = "asjytxxjmd"
+	pattern = "dspnjxhzkm"
 	match, _ = regexp.MatchString(pattern, result)
 	if (!match) {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
@@ -33,7 +33,7 @@ func TestServer(t *testing.T) {
 
     result = httpGet(fmt.Sprintf("http://localhost:%d/?foo=bar", port))
 	//fmt.Printf("%s\n", result)
-	pattern = "zniescypfb"
+	pattern = "fsnckooszy"
 	match, _ = regexp.MatchString(pattern, result)
 	if (!match) {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
