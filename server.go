@@ -118,7 +118,7 @@ func (s *Server_struct) Stop() {
 
 
 /**
-* Our responder handler.  This is used when serving up a page.
+* Our response handler.  This is used when serving up a page.
 * Yes, this implements the http.Handler interface, as descirbed 
 * at http://golang.org/pkg/net/http/#Handler
 * I never thought I'd be implementing an interface this soon. Scary easy.
