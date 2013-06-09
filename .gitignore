@@ -5,5 +5,5 @@
 #
 # We don't want to check in the binary
 #
-fake_website
+procedural-webserver
 
