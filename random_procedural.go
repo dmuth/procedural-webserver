@@ -1,6 +1,6 @@
 
 
-package main
+package server
 
 import "bytes"
 import "crypto/md5"

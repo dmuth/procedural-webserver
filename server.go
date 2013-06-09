@@ -1,8 +1,5 @@
-/**
-* This package is responsible for actually running the webserver.
-*/
 
-package main
+package server
 
 import "fmt"
 import "time"
@@ -11,6 +8,18 @@ import "net/http"
 import "strconv"
 
 import log "github.com/dmuth/google-go-log4go"
+
+
+//
+// Configuration for the server
+//
+type Config struct {
+	NumLinksMin uint
+	NumLinksMax uint
+	NumImagesMin uint
+	NumImagesMax uint
+	Seed string
+}
 
 
 type Server_struct struct {
@@ -26,19 +35,35 @@ type Server_struct struct {
 	// Our listener, so we can stop the server
 	//
 	listener net.Listener
+	//
+	// Embedded configuration information
+	//
+	config Config
 }
 
 
 /**
 * Instantiate a structure for our webserver.
-* @param {Config} html_config Our configuration for HTML pages
 * @param {int} port What port are we running on?
+* @param {uint} num_links_min Min number of links per page
+* @param {uint} num_links_max Max number of links per page
+* @param {uint} num_images_min Min number of images per page
+* @param {uint} num_images_max Max number of images per page
+* @param {string} seed The seed which all random strings will be based off of
+*
+* @return {Server_struct} Our server structure
+*
 */
-func NewServer(html_config Config, port int) (retval Server_struct) {
+func NewServer(port int, num_links_min uint, num_links_max uint, 
+	num_images_min uint, num_images_max uint, 
+	seed string) (retval Server_struct) {
 
 	var listener net.Listener
-	html_struct := NewHtml(html_config)
-	retval = Server_struct{html_struct, port, listener}
+	config := Config{ num_links_min, num_links_max,
+		num_images_min, num_images_max, seed }
+	html_struct := NewHtml(config)
+
+	retval = Server_struct{ html_struct, port, listener, config }
 
 	return(retval)
 

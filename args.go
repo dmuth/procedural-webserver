@@ -1,5 +1,5 @@
 
-package main
+package server
 
 import "flag"
 import "fmt"
@@ -8,18 +8,6 @@ import "os"
 import log "github.com/dmuth/google-go-log4go"
 
 
-//
-// Configuration for what was passed in on the command line.
-//
-type Config struct {
-	NumLinksMin uint
-	NumLinksMax uint
-	NumImagesMin uint
-	NumImagesMax uint
-	Seed string
-	//MaxLevels int,
-	//NumKeyValuePairs
-}
 
 
 /**

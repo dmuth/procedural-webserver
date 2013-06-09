@@ -1,5 +1,5 @@
 
-package main
+package server
 
 import "fmt"
 import "net/http"
@@ -11,8 +11,7 @@ import "testing"
 func TestServer(t *testing.T) {
 
 	port := 8080
-	config := Config{1, 5, 1, 5, "test_seed"}
-	server_obj := NewServer(config, port)
+	server_obj := NewServer(port, 1, 5, 1, 5, "test_seed")
 
 	go server_obj.Start()
 
