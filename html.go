@@ -125,8 +125,14 @@ func (h *Html_struct) getImages(seed string, config Config) (retval string) {
 		retval += fmt.Sprintf(
 			"<img src=\"/%s.png\" alt=\"%s\" title=\"%s\" />\n", 
 			str, str, str);
-		// Change the seed for the next iteration of the loop
-		seed += "1"
+		//
+		// Increase the seed by a prime for the next iteration.
+		// I used to do this by 1, but then we had a "staircase" effect
+		// for subsequent numbers.
+		//
+		// And this is why I should not write a random number generator. Ever.
+		//
+		seed += "13"
 	}
 
 	return(retval)
