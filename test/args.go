@@ -1,12 +1,12 @@
 
-package server
+package main
 
 import "flag"
 import "fmt"
 import "os"
 
 import log "github.com/dmuth/google-go-log4go"
-
+import server "github.com/dmuth/procedural-webserver"
 
 
 
@@ -14,9 +14,9 @@ import log "github.com/dmuth/google-go-log4go"
 * Parse our command line arguments.
 * @return {config} Our configuration info
 */
-func Parse() (retval Config) {
+func ParseArgs() (retval server.Config) {
 
-	retval = Config{0, 0, 0, 0, ""}
+	retval = server.Config{0, 0, 0, 0, ""}
 
 	flag.StringVar(&retval.Seed, "seed", "generic_seed",
 		"Random seed to start with. This provides deterministic " +
@@ -60,6 +60,6 @@ func Parse() (retval Config) {
 
 	return(retval)
 
-} // End of Parse()
+} // End of ParseArgs()
 
 
