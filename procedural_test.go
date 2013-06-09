@@ -1,5 +1,5 @@
 
-package random_procedural
+package main
 
 //import "fmt"
 import "testing"
@@ -8,7 +8,7 @@ import "testing"
 func TestStringN(t *testing.T) {
 
 	seed := "/foobar"
-	random := New()
+	random := NewRand()
 
 	output := random.StringN(seed, 1)
 	expected := "b"
@@ -34,7 +34,7 @@ func TestStringN(t *testing.T) {
 func TestStringLowerN(t *testing.T) {
 
 	seed := "/foobar"
-	random := New()
+	random := NewRand()
 	output := random.StringLowerN(seed, 1)
 	expected := "u"
 	if (output != expected) {
@@ -60,7 +60,7 @@ func TestStringLowerN(t *testing.T) {
 func TestRandomIntn(t *testing.T) {
 
 	seed := "/foobar"
-	random := New()
+	random := NewRand()
 
 	expected := []uint{38171, 815034, 971458}
 	for i:=0; i<len(expected); i++ {

@@ -1,6 +1,6 @@
 
 
-package random_procedural
+package main
 
 import "bytes"
 import "crypto/md5"
@@ -20,7 +20,7 @@ type Random_struct struct {
 *	We're specifying this at creation time so that the bitmask 
 *	only needs to be created once.
 */
-func New() (retval Random_struct) {
+func NewRand() (retval Random_struct) {
 
 	retval = Random_struct{}
 

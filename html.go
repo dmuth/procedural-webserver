@@ -1,35 +1,33 @@
 
-package html
+package main
 
 import "fmt"
 
-import "../args"
-import rand "../random_procedural"
 import log "github.com/dmuth/google-go-log4go"
 
 
 type Html_struct struct {
-	config args.Config
-	random_num_links rand.Random_struct
+	config Config
+	random_num_links Random_struct
 	num_links_diff uint
-	random_num_images rand.Random_struct
+	random_num_images Random_struct
 	num_images_diff uint
-	random_chars rand.Random_struct
+	random_chars Random_struct
 }
 
 
 /**
 * Create a new variable/object based on our Html_struct structure.
 */
-func New(config args.Config) (retval Html_struct) {
+func NewHtml(config Config) (retval Html_struct) {
 
 	num_links_diff := config.NumLinksMax - config.NumLinksMin
-	random_num_links := rand.New()
+	random_num_links := NewRand()
 
 	num_images_diff := config.NumImagesMax - config.NumImagesMin
-	random_num_images := rand.New()
+	random_num_images := NewRand()
 
-	random_chars := rand.New()
+	random_chars := NewRand()
 
 	retval = Html_struct{config,
 		random_num_links, num_links_diff,
@@ -79,7 +77,7 @@ func (h *Html_struct) Html(seed string) (retval string) {
 * @param {string} seed Our seed
 *
 */
-func (h *Html_struct) getLinks(seed string, config args.Config) (retval string) {
+func (h *Html_struct) getLinks(seed string, config Config) (retval string) {
 
 	//
 	// Determine how many links go on this page
@@ -110,7 +108,7 @@ func (h *Html_struct) getLinks(seed string, config args.Config) (retval string) 
 *
 * Generate our images.
 */
-func (h *Html_struct) getImages(seed string, config args.Config) (retval string) {
+func (h *Html_struct) getImages(seed string, config Config) (retval string) {
 
 	//
 	// How many images on the page?

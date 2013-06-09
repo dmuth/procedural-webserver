@@ -18,7 +18,7 @@ killall a.out || true
 OPTS=""
 OPTS="${OPTS} --debug-level trace"
 OPTS="${OPTS} --seed testSeed "
-go run ./main.go ${OPTS} &
+go run ./*.go ${OPTS} &
 
 
 #

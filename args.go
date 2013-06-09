@@ -1,5 +1,5 @@
 
-package args
+package main
 
 import "flag"
 import "fmt"

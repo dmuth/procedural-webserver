@@ -2,7 +2,7 @@
 * This package is responsible for actually running the webserver.
 */
 
-package server
+package main
 
 import "fmt"
 import "time"
@@ -12,15 +12,12 @@ import "strconv"
 
 import log "github.com/dmuth/google-go-log4go"
 
-import "../args"
-import "../html"
-
 
 type Server_struct struct {
 	//
 	// Our html structure
 	//
-	html html.Html_struct
+	html Html_struct
 	//
 	// What port are we listening on?
 	//
@@ -37,10 +34,10 @@ type Server_struct struct {
 * @param {Config} html_config Our configuration for HTML pages
 * @param {int} port What port are we running on?
 */
-func New(html_config args.Config, port int) (retval Server_struct) {
+func NewServer(html_config Config, port int) (retval Server_struct) {
 
 	var listener net.Listener
-	html_struct := html.New(html_config)
+	html_struct := NewHtml(html_config)
 	retval = Server_struct{html_struct, port, listener}
 
 	return(retval)
