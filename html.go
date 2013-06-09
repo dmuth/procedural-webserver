@@ -87,7 +87,7 @@ func (h *Html_struct) getLinks(seed string, config Config) (retval string) {
 		num_links = h.random_num_links.Intn(seed, h.num_links_diff)
 		num_links += config.NumLinksMin
 		// Change the seed for the next iteration of the loop
-		seed += "1"
+		seed += "13"
 	}
 	log.Debug(fmt.Sprintf("Number of links on page: %d", num_links))
 
@@ -95,7 +95,7 @@ func (h *Html_struct) getLinks(seed string, config Config) (retval string) {
 		str := h.random_chars.StringLowerN(seed, 10)
 		retval += fmt.Sprintf("<a href=\"/%s\" >%s</a>\n", str, str);
 		// Change the seed for the next iteration of the loop
-		seed += "1"
+		seed += "13"
 	}
 
 	return(retval);
