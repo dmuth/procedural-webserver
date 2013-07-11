@@ -46,20 +46,6 @@ func TestServer(t *testing.T) {
 }
 
 
-func TestServerCrash(t *testing.T) {
-
-	port := 8080
-	server_obj := NewServer(port, 1, 5, 1, 5, "test_seed")
-
-	//
-	// If we screw up, the server will crash here.
-	//
-	go server_obj.Start()
-	server_obj.Stop()
-
-}
-
-
 /**
 * Helper function to make GET requests and return the value.
 */
