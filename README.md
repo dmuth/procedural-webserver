@@ -10,6 +10,19 @@ web crawler yet still get unique pages generated with little memory usage.
 
 ### Usage
 
+#### For testing from the CLI
+
+How to run the webserver straight from the command line:
+
+    go run ./test/main.go
+
+From there, you can retrieve webpages with curl:
+
+    curl localhost:8080/
+
+
+#### From another app
+
 To use this in your app, you'd want Go code that looks like this:
 
     import server "github.com/dmuth/procedural-webserver"
