@@ -8,17 +8,28 @@ owners would not appreciate that) so I instead wrote this webserver to serve
 up content which is generated procedurally.  That way, I can hammer it with my 
 web crawler yet still get unique pages generated with little memory usage.
 
+### Installation
+
+- Make sure your golib is set up properly: `export GOLIB=$HOME/golib`
+- Make sure the bin directory is in your path: `PATH=$PATH:$GOLIB/bin`
+- Now install the package `go get -v github.com/dmuth/procedural-webserver-cli`
+
 ### Usage
 
-#### For testing from the CLI
+`$GOLIB/bin/procedural-webserver-cli`
 
-How to run the webserver straight from the command line:
+This wil start a webserver listening on at http://localhost:8080/
 
-    go run ./test/main.go
+#### Syntax
 
-From there, you can retrieve webpages with curl:
-
-    curl localhost:8080/
+    procedural-webserver-cli --debug-level level --num-links-min n --num-links-max n --num-images-min n --num-images-max n --port portnum --seed string
+        -port=8080: Port to listen on
+        -debug-level="info": Set the debug level
+        -num-links-min=1: Minimum number of links per page
+        -num-links-max=10: Maximum number of links per page
+        -num-images-min=1: Minimum number of images per page
+        -num-images-max=10: Maximum number of images per page
+        -seed="test_seed": Seed to use for random values
 
 
 #### From another app
@@ -38,10 +49,9 @@ To use this in your app, you'd want Go code that looks like this:
 - NumLinksMax: Max number of links listed on each generated page. (links bring up more procedurally generated content)
 - NumImagesMin: Min number of images. (actual number of created images is somewhere between min and max)
 - NumImagesMax: Max number of images listed on each generated page. (they're not really images)
-- Seed: Our base seed. If not specified, a default is used.  If specified, this change s the content of 
+- Seed: Our base seed. If not specified, a default is used.  If specified, this changes the content of 
 all pages. If you understand how Minecraft world seeds work, this is the same concept.
     
-Once the server is running, do `curl localhost` to bring up the main page and go from there.
 
 ### Query parameters
 
@@ -69,6 +79,4 @@ Send them to me, Douglas Muth: http://www.dmuth.org/contact
 Filing a bug here is fine, too!
 
 Either way, I'd love to know if you're using this webserver, and find it helpful.
-
-
 
