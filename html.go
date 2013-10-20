@@ -56,8 +56,12 @@ func (h *Html_struct) Html(seed string) (retval string) {
 	//
 	// Create the actual links and images
 	//
+	retval += "<a href=\"/\">[Home]</a><br/>\n"
+	retval += "<br/>\n"
 	retval += h.getLinks(seed, h.config)
+	retval += "<br/>\n"
 	retval += h.getImages(seed, h.config)
+	retval += "<br/>\n"
 
 	retval = "<html>\n" + 
 		"<head><title></title></head>\n" +
@@ -93,7 +97,7 @@ func (h *Html_struct) getLinks(seed string, config Config) (retval string) {
 
 	for i:=uint(0); i<num_links; i++ {
 		str := h.random_chars.StringLowerN(seed, 10)
-		retval += fmt.Sprintf("<a href=\"/%s\" >%s</a>\n", str, str);
+		retval += fmt.Sprintf("<a href=\"/%s\" >%s</a><br/>\n", str, str);
 		// Change the seed for the next iteration of the loop
 		seed += "13"
 	}
@@ -123,7 +127,7 @@ func (h *Html_struct) getImages(seed string, config Config) (retval string) {
 	for i:=uint(0); i<num_images; i++ {
 		str := h.random_chars.StringLowerN(seed, 10)
 		retval += fmt.Sprintf(
-			"<img src=\"/%s.png\" alt=\"%s\" title=\"%s\" />\n", 
+			"<img src=\"/%s.png\" alt=\"%s\" title=\"%s\" /><br/>\n", 
 			str, str, str);
 		//
 		// Increase the seed by a prime for the next iteration.
