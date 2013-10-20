@@ -8,6 +8,7 @@ import "flag"
 import "fmt"
 import "os"
 
+import log "github.com/dmuth/google-go-log4go"
 import server "github.com/dmuth/procedural-webserver"
 
 
@@ -21,6 +22,7 @@ func main() {
 	seed := flag.String("seed", "test_seed", "Seed to use for random values")
 	h := flag.Bool("h", false, "To get this help")
 	help := flag.Bool("help", false, "To get this help")
+	debug_level := flag.String("debug-level", "info", "Set the debug level")
 
 	flag.Parse()
 
@@ -28,6 +30,9 @@ func main() {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
+
+	log.SetLevelString(*debug_level)
+	log.Error("Debug level: " + *debug_level)
 
 	fmt.Printf("About to start server on localpost port %d... (^C to exit!)", *port)
 	server_obj := server.NewServer(*port, *num_links_min, *num_links_max,
