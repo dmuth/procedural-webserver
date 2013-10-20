@@ -136,8 +136,16 @@ func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	delay := req.FormValue("delay")
 	log.Debugf("Delay passed in: %s", delay)
+
 	if (delay != "") {
 		duration, _ := time.ParseDuration(delay)
+		//
+		// Just in case something went wrong, assume the unit is milliseconds.
+		//
+		if (duration == 0) {
+			delay += "ms"
+			duration, _ = time.ParseDuration(delay)
+		}
 		log.Debugf("Pausing for %s...", duration )
 		time.Sleep(duration)
 	}
