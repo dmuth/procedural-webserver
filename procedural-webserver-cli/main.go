@@ -1,7 +1,7 @@
 /**
-* This script is used to just to run the server from the command line for 
+* This script is used to just to run the server from the command line for
 * testing purposes.
-*/
+ */
 package main
 
 import "flag"
@@ -10,7 +10,6 @@ import "os"
 
 import log "github.com/dmuth/google-go-log4go"
 import server "github.com/dmuth/procedural-webserver"
-
 
 func main() {
 
@@ -26,7 +25,7 @@ func main() {
 
 	flag.Parse()
 
-	if (*h || *help) {
+	if *h || *help {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -36,9 +35,8 @@ func main() {
 
 	fmt.Printf("About to start server on localpost port %d... (^C to exit!)", *port)
 	server_obj := server.NewServer(*port, *num_links_min, *num_links_max,
-		*num_images_min, *num_images_max, 
+		*num_images_min, *num_images_max,
 		*seed)
 	server_obj.Start()
 
 } // End of main()
-
