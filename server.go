@@ -1,4 +1,3 @@
-
 package server
 
 import "fmt"
@@ -9,18 +8,16 @@ import "strconv"
 
 import log "github.com/dmuth/google-go-log4go"
 
-
 //
 // Configuration for the server
 //
 type Config struct {
-	NumLinksMin uint
-	NumLinksMax uint
+	NumLinksMin  uint
+	NumLinksMax  uint
 	NumImagesMin uint
 	NumImagesMax uint
-	Seed string
+	Seed         string
 }
-
 
 type Server_struct struct {
 	//
@@ -41,7 +38,6 @@ type Server_struct struct {
 	config Config
 }
 
-
 /**
 * Instantiate a structure for our webserver.
 * @param {int} port What port are we running on?
@@ -53,34 +49,33 @@ type Server_struct struct {
 *
 * @return {Server_struct} Our server structure
 *
-*/
-func NewServer(port int, num_links_min uint, num_links_max uint, 
-	num_images_min uint, num_images_max uint, 
+ */
+func NewServer(port int, num_links_min uint, num_links_max uint,
+	num_images_min uint, num_images_max uint,
 	seed string) (retval Server_struct) {
 
 	var listener net.Listener
-	config := Config{ num_links_min, num_links_max,
-		num_images_min, num_images_max, seed }
+	config := Config{num_links_min, num_links_max,
+		num_images_min, num_images_max, seed}
 	html_struct := NewHtml(config)
 
-	retval = Server_struct{ html_struct, port, listener, config }
+	retval = Server_struct{html_struct, port, listener, config}
 
-	return(retval)
+	return (retval)
 
 } // End of New()
 
-
 /**
 * Actually start our webserver.
-* This will block forever, so we should run this as a goroutine 
+* This will block forever, so we should run this as a goroutine
 * if we want to continue going in our program.
-* 
-*/
+*
+ */
 func (s *Server_struct) Start() {
 
 	var err error
 	s.listener, err = net.Listen("tcp", fmt.Sprintf(":%d", s.port))
-	if (err != nil) {
+	if err != nil {
 		panic(err)
 		return
 	}
@@ -91,20 +86,19 @@ func (s *Server_struct) Start() {
 
 } // End of Start()
 
-
 /**
 * Stop our currently running server.
-*/
+ */
 func (s *Server_struct) Stop() {
 
 	//
 	// If we try to close something that is nil, we'll get a panic.
-	// This is a race condition which can be triggered if we close 
+	// This is a race condition which can be triggered if we close
 	// the server immediately after starting it.
 	//
-	if (s.listener == nil) {
+	if s.listener == nil {
 		//
-		// I'm not sure if not closing a listener which hasn't yet opened 
+		// I'm not sure if not closing a listener which hasn't yet opened
 		// can cause issues down the road, hence the Warning.
 		//
 		log.Warn("Stop(): Listener is currently nil, not closing.")
@@ -116,18 +110,17 @@ func (s *Server_struct) Stop() {
 
 } // End of Stop()
 
-
 /**
 * Our response handler.  This is used when serving up a page.
-* Yes, this implements the http.Handler interface, as descirbed 
+* Yes, this implements the http.Handler interface, as descirbed
 * at http://golang.org/pkg/net/http/#Handler
 * I never thought I'd be implementing an interface this soon. Scary easy.
 *
-*/
+ */
 func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	uri := req.RequestURI
-	log.Infof("Request Start: %s (%s %s) User-Agent: %s", req.URL.Path, uri, 
+	log.Infof("Request Start: %s (%s %s) User-Agent: %s", req.URL.Path, uri,
 		req.RemoteAddr, req.UserAgent())
 	start_time := time.Now()
 
@@ -137,16 +130,16 @@ func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	delay := req.FormValue("delay")
 	log.Debugf("Delay passed in: %s", delay)
 
-	if (delay != "") {
+	if delay != "" {
 		duration, _ := time.ParseDuration(delay)
 		//
 		// Just in case something went wrong, assume the unit is milliseconds.
 		//
-		if (duration == 0) {
+		if duration == 0 {
 			delay += "ms"
 			duration, _ = time.ParseDuration(delay)
 		}
-		log.Debugf("Pausing for %s...", duration )
+		log.Debugf("Pausing for %s...", duration)
 		time.Sleep(duration)
 	}
 
@@ -154,12 +147,12 @@ func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	// Set an error code if one was passed in.
 	// We'll still send the content, since that's legitimate.
 	//
-	if (code != 0) {
+	if code != 0 {
 		http.Error(res, "", code)
 	}
 
 	//
-	// Our URI is our seed so we'll get the same content on repeated page 
+	// Our URI is our seed so we'll get the same content on repeated page
 	// loads. (aka procedural page generation!)
 	//
 	output := s.html.Html(uri)
@@ -167,9 +160,7 @@ func (s *Server_struct) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	elapsed := time.Now().Sub(start_time)
 	log.Infof("Request Complete in %.6f sec: %s (%s %s)",
-		float64(elapsed.Nanoseconds()) / float64(1000000000),
+		float64(elapsed.Nanoseconds())/float64(1000000000),
 		req.URL.Path, req.RequestURI, req.RemoteAddr)
 
 } // End of ServeHTTP()
-
-

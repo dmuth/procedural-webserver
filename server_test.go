@@ -1,4 +1,3 @@
-
 package server
 
 import "fmt"
@@ -7,7 +6,6 @@ import "io/ioutil"
 import "regexp"
 import "testing"
 
-
 func TestServer(t *testing.T) {
 
 	port := 8080
@@ -15,27 +13,27 @@ func TestServer(t *testing.T) {
 
 	go server_obj.Start()
 
-    result := httpGet(fmt.Sprintf("http://localhost:%d", port))
+	result := httpGet(fmt.Sprintf("http://localhost:%d", port))
 	//fmt.Printf("%s\n", result)
 	pattern := "mwhxoejfka"
 	match, _ := regexp.MatchString(pattern, result)
-	if (!match) {
+	if !match {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
 	}
 
-    result = httpGet(fmt.Sprintf("http://localhost:%d/12345", port))
+	result = httpGet(fmt.Sprintf("http://localhost:%d/12345", port))
 	//fmt.Printf("%s\n", result)
 	pattern = "dspnjxhzkm"
 	match, _ = regexp.MatchString(pattern, result)
-	if (!match) {
+	if !match {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
 	}
 
-    result = httpGet(fmt.Sprintf("http://localhost:%d/?foo=bar", port))
+	result = httpGet(fmt.Sprintf("http://localhost:%d/?foo=bar", port))
 	//fmt.Printf("%s\n", result)
 	pattern = "fsnckooszy"
 	match, _ = regexp.MatchString(pattern, result)
-	if (!match) {
+	if !match {
 		t.Errorf("could not find pattern '%s' in result '%s", pattern, result)
 	}
 
@@ -45,26 +43,23 @@ func TestServer(t *testing.T) {
 
 }
 
-
 /**
 * Helper function to make GET requests and return the value.
-*/
+ */
 func httpGet(url string) (retval string) {
 
 	resp, err := http.Get(url)
-	if (err != nil) {
+	if err != nil {
 		return
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	resp.Body.Close()
 
-	if (err != nil) {
+	if err != nil {
 		return
 	}
 
-	return(fmt.Sprintf("%s", body))
+	return (fmt.Sprintf("%s", body))
 
 } // End of httpGet()
-
-
