@@ -12,9 +12,12 @@ web crawler yet still get unique pages generated with little memory usage.
 
 - Make sure your golib is set up properly: `export GOLIB=$HOME/golib`
 - Make sure the bin directory is in your path: `PATH=$PATH:$GOLIB/bin`
-- Now install the package `go get -v github.com/dmuth/procedural-webserver-cli`
+- To install just the package:
+    - `go get -v github.com/dmuth/procedural-webserver`
+- To install the CLI:
+    - `go get -v github.com/dmuth/procedural-webserver/procedural-webserver-cli`
 
-### Usage
+### Usage from the command line
 
 `$GOLIB/bin/procedural-webserver-cli`
 
@@ -66,6 +69,24 @@ The following query parameters will have effects on the page that is generated:
         - 5m
         - 1h (Yes, this is an hour.  Google Go doesn't care. But Curl might!)
  
+### Running the tests
+
+    go test -v github.com/dmuth/procedural-webserver
+
+You should see results like this:
+
+    === RUN TestStringN
+    --- PASS: TestStringN (0.00 seconds)
+    === RUN TestStringLowerN
+    --- PASS: TestStringLowerN (0.00 seconds)
+    === RUN TestRandomIntn
+    --- PASS: TestRandomIntn (0.00 seconds)
+    === RUN TestServer
+    --- PASS: TestServer (0.00 seconds)
+    PASS
+    ok      github.com/dmuth/procedural-webserver   0.031s
+
+
 ### TODO list for The Future
 - Optimizations under heavy load
 - Generate a random title for each page
